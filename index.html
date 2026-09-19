@@ -435,9 +435,11 @@
     const filterButtons = document.querySelectorAll("[data-filter]");
     const TODO_STORAGE_KEY = "today-todos";
     const THEME_STORAGE_KEY = "todo-theme";
+    const FILTER_STORAGE_KEY = "todo-filter";
+    const VALID_FILTERS = new Set(["all", "active", "completed"]);
 
     let todos = loadTodos();
-    let currentFilter = "all";
+    let currentFilter = loadFilter();
 
     // 從瀏覽器儲存空間載入待辦事項,讀不到時使用空清單。
     function loadTodos() {
@@ -446,6 +448,30 @@
         return Array.isArray(savedTodos) ? savedTodos : [];
       } catch {
         return [];
+      }
+    }
+
+    function loadFilter() {
+      try {
+        const savedFilter = localStorage.getItem(FILTER_STORAGE_KEY);
+
+        if (savedFilter && VALID_FILTERS.has(savedFilter)) {
+          return savedFilter;
+        }
+
+        localStorage.setItem(FILTER_STORAGE_KEY, "all");
+        return "all";
+      } catch {
+        return "all";
+      }
+    }
+
+    function saveFilter() {
+      if (VALID_FILTERS.has(currentFilter)) {
+        localStorage.setItem(FILTER_STORAGE_KEY, currentFilter);
+      } else {
+        currentFilter = "all";
+        localStorage.setItem(FILTER_STORAGE_KEY, "all");
       }
     }
 
@@ -483,6 +509,14 @@
     }
 
     // 根據目前篩選條件重新繪製清單與未完成數量。
+    function updateFilterButtons() {
+      filterButtons.forEach((filterButton) => {
+        const isActive = filterButton.dataset.filter === currentFilter;
+        filterButton.classList.toggle("active", isActive);
+        filterButton.setAttribute("aria-pressed", String(isActive));
+      });
+    }
+
     function renderTodos() {
       todoList.replaceChildren();
 
@@ -583,17 +617,15 @@
     filterButtons.forEach((button) => {
       button.addEventListener("click", () => {
         currentFilter = button.dataset.filter;
-        filterButtons.forEach((filterButton) => {
-          const isActive = filterButton === button;
-          filterButton.classList.toggle("active", isActive);
-          filterButton.setAttribute("aria-pressed", String(isActive));
-        });
+        saveFilter();
+        updateFilterButtons();
         renderTodos();
       });
     });
 
     loadTheme();
     updateThemeToggle();
+    updateFilterButtons();
     renderTodos();
   </script>
 </body>
