@@ -1,0 +1,21 @@
+- main [ref=e2]:
+  - region "今日待辦" [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - paragraph [ref=e6]: MY DAY / TASKS
+        - heading "今日待辦" [level=1] [ref=e7]
+      - generic [ref=e8]: ✓
+    - generic [ref=e9]:
+      - generic [ref=e10]: 新增待辦事項
+      - textbox "新增待辦事項" [active] [ref=e11]:
+        - /placeholder: 接下來要完成什麼？
+      - button "新增" [ref=e12] [cursor=pointer]
+    - generic [ref=e14]: 任務清單
+    - list [ref=e16]:
+      - listitem [ref=e17]:
+        - checkbox "標記「整理工作桌面」為未完成" [checked] [ref=e18] [cursor=pointer]
+        - generic [ref=e19]: 整理工作桌面
+        - button "刪除「整理工作桌面」" [ref=e20] [cursor=pointer]: ×
+    - generic [ref=e21]:
+      - generic [ref=e22]: 未完成:0 項
+      - generic [ref=e23]: 自動儲存中
