@@ -512,13 +512,17 @@
 
       const unfinishedCount = todos.filter((todo) => !todo.completed).length;
       remainingCount.textContent = `未完成:${unfinishedCount} 項`;
-      emptyState.textContent = todos.length === 0
-        ? "還沒有任何待辦事項,新增一個吧!"
-        : currentFilter === "active"
-          ? "目前沒有未完成的待辦事項。"
-          : currentFilter === "completed"
-            ? "目前沒有已完成的待辦事項。"
-            : "目前沒有符合條件的待辦事項。";
+
+      if (todos.length === 0) {
+        emptyState.textContent = "還沒有任何待辦事項,新增一個吧!";
+      } else if (currentFilter === "active") {
+        emptyState.textContent = "目前沒有未完成的待辦事項。切換回「全部」即可查看所有任務。";
+      } else if (currentFilter === "completed") {
+        emptyState.textContent = "目前沒有已完成的待辦事項。這些項目只是被篩選條件過濾掉了,沒有被刪除。";
+      } else {
+        emptyState.textContent = "目前沒有符合條件的待辦事項。";
+      }
+
       emptyState.hidden = visibleTodos.length > 0;
     }
 
